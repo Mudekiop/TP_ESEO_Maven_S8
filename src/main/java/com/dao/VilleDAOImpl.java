@@ -64,4 +64,26 @@ public class VilleDAOImpl implements VilleDAO {
 		return null;
 	}
 
+	@Override
+	public void ajouterVille() {
+		Connection con = new JDBCConfiguration().getCo();
+
+		try {
+			Statement st = con.createStatement();
+			st.executeUpdate(
+					"INSERT INTO `ville_france` (Code_commune_INSEE, Nom_commune, Code_postal, Libelle_acheminement, Ligne_5, Latitude, Longitude) VALUES ('44186','Sainte Pazanne','44680','Sainte Pazanne','','47.084','-1.81814');");
+			System.out.println("Ajout Réussi");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Impossible d'ajouter la ville à la base de donnée");
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.out.println("Fermeture impossible");
+			}
+		}
+	}
+
 }

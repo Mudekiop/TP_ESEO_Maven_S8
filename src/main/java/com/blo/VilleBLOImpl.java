@@ -25,4 +25,8 @@ public class VilleBLOImpl implements VilleBLO {
 		return listeVille;
 	}
 
+	public void ajouterVille() {
+		villeDAO.ajouterVille();
+	}
+
 }

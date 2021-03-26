@@ -25,4 +25,13 @@ public class VilleController {
 		System.out.println("Appel GET");
 		return villeBLOService.getInfoVille(codePostal);
 	}
+
+	// Méthode Post
+	@RequestMapping(value = "/ville_post", method = { RequestMethod.POST, RequestMethod.GET })
+	@ResponseBody
+	public ArrayList<Ville> appelPost() {
+		System.out.println("Appel POST");
+		villeBLOService.ajouterVille();
+		return villeBLOService.getInfoVille("44680");
+	}
 }

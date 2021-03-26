@@ -9,4 +9,6 @@ public interface VilleDAO {
 	ArrayList<Ville> findAllVilles();
 
 	ArrayList<Ville> getVilleByCodePostal(String code);
+
+	void ajouterVille();
 }
