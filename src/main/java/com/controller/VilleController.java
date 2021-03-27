@@ -3,6 +3,7 @@ package com.controller;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,11 +28,9 @@ public class VilleController {
 	}
 
 	// Méthode Post
-	@RequestMapping(value = "/ville_post", method = { RequestMethod.POST, RequestMethod.GET })
-	@ResponseBody
-	public ArrayList<Ville> appelPost() {
+	@RequestMapping(value = "/ville", method = RequestMethod.POST)
+	public void appelPost(@RequestBody Ville newVille) {
 		System.out.println("Appel POST");
-		villeBLOService.ajouterVille();
-		return villeBLOService.getInfoVille("44680");
+		villeBLOService.ajouterVille(newVille);
 	}
 }

@@ -1,21 +1,27 @@
 package com.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Ville {
 
 	private String insee;
 	private String nom;
 	private String codePostal;
 	private String libelle;
-	private String latitude;
-	private String longitude;
+	private String ligne;
+	private Coordonnees coord;
 
-	public Ville(String insee, String nom, String code, String libelle, String lat, String longi) {
+	@JsonCreator
+	public Ville(@JsonProperty("insee") String insee, @JsonProperty("nom") String nom,
+			@JsonProperty("codePostal") String code, @JsonProperty("libelle") String libelle,
+			@JsonProperty("ligne") String ligne, @JsonProperty("coordonnees") Coordonnees coord) {
 		this.insee = insee;
 		this.nom = nom;
 		this.codePostal = code;
 		this.libelle = libelle;
-		this.latitude = lat;
-		this.longitude = longi;
+		this.ligne = ligne;
+		this.coord = coord;
 	}
 
 	public String getInsee() {
@@ -50,20 +56,21 @@ public class Ville {
 		this.libelle = libelle;
 	}
 
-	public String getLatitude() {
-		return latitude;
+	public String getLigne() {
+		return ligne;
 	}
 
-	public void setLatitude(String latitude) {
-		this.latitude = latitude;
+	public void setLigne(String ligne) {
+		this.ligne = ligne;
 	}
 
-	public String getLongitude() {
-		return longitude;
+	public Coordonnees getCoord() {
+		return coord;
 	}
 
-	public void setLongitude(String longitude) {
-		this.longitude = longitude;
+	public void setCoord(Coordonnees coord) {
+		this.coord = coord;
 	}
+
 
 }

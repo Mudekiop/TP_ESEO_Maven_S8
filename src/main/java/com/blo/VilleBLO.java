@@ -7,6 +7,6 @@ import com.dto.Ville;
 public interface VilleBLO {
 
 	ArrayList<Ville> getInfoVille(String param);
-	
-	void ajouterVille();
+
+	void ajouterVille(Ville ville);
 }

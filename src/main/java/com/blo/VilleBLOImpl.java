@@ -25,8 +25,8 @@ public class VilleBLOImpl implements VilleBLO {
 		return listeVille;
 	}
 
-	public void ajouterVille() {
-		villeDAO.ajouterVille();
+	public void ajouterVille(Ville ville) {
+		villeDAO.ajouterVille(ville);
 	}
 
 }
