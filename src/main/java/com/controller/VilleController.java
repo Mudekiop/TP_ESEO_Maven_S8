@@ -33,4 +33,11 @@ public class VilleController {
 		System.out.println("Appel POST");
 		villeBLOService.ajouterVille(newVille);
 	}
+
+	// Méthode Put
+	@RequestMapping(value = "/ville", method = RequestMethod.PUT)
+	public void appelPut(@RequestBody Ville newVille, @RequestParam(required = true, value = "insee") String insee) {
+		System.out.println("Appel PUT");
+		villeBLOService.modifierVille(newVille, insee);
+	}
 }

@@ -29,4 +29,8 @@ public class VilleBLOImpl implements VilleBLO {
 		villeDAO.ajouterVille(ville);
 	}
 
+	public void modifierVille(Ville ville, String insee) {
+		villeDAO.modifierVille(ville, insee);
+	}
+
 }

@@ -11,4 +11,6 @@ public interface VilleDAO {
 	ArrayList<Ville> getVilleByCodePostal(String code);
 
 	void ajouterVille(Ville ville);
+
+	void modifierVille(Ville ville, String insee);
 }

@@ -9,4 +9,6 @@ public interface VilleBLO {
 	ArrayList<Ville> getInfoVille(String param);
 
 	void ajouterVille(Ville ville);
+	
+	void modifierVille(Ville ville, String insee);
 }

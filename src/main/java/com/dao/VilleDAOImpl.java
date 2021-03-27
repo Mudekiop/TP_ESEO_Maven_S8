@@ -19,9 +19,11 @@ public class VilleDAOImpl implements VilleDAO {
 		ArrayList<Ville> liste = new ArrayList<Ville>();
 		Coordonnees coord = null;
 		Connection con = new JDBCConfiguration().getCo();
+		Statement st = null;
+		ResultSet resultat = null;
 		try {
-			Statement st = con.createStatement();
-			ResultSet resultat = st.executeQuery("SELECT * FROM ville_france;");
+			st = con.createStatement();
+			resultat = st.executeQuery("SELECT * FROM ville_france;");
 			while (resultat.next()) {
 				coord = new Coordonnees(resultat.getString("Latitude"), resultat.getString("Longitude"));
 				Ville ville = new Ville(resultat.getString(1), resultat.getString(2), resultat.getString(3),
@@ -33,6 +35,8 @@ public class VilleDAOImpl implements VilleDAO {
 			e.printStackTrace();
 		} finally {
 			try {
+				resultat.close();
+				st.close();
 				con.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -45,10 +49,12 @@ public class VilleDAOImpl implements VilleDAO {
 		ArrayList<Ville> liste = new ArrayList<Ville>();
 		Coordonnees coord = null;
 		Connection con = new JDBCConfiguration().getCo();
+		Statement st = null;
+		ResultSet resultat = null;
 
 		try {
-			Statement st = con.createStatement();
-			ResultSet resultat = st.executeQuery("SELECT * FROM ville_france WHERE Code_postal='" + code + "';");
+			st = con.createStatement();
+			resultat = st.executeQuery("SELECT * FROM ville_france WHERE Code_postal='" + code + "';");
 			while (resultat.next()) {
 				coord = new Coordonnees(resultat.getString("Latitude"), resultat.getString("Longitude"));
 				Ville ville = new Ville(resultat.getString(1), resultat.getString(2), resultat.getString(3),
@@ -60,6 +66,8 @@ public class VilleDAOImpl implements VilleDAO {
 			e.printStackTrace();
 		} finally {
 			try {
+				resultat.close();
+				st.close();
 				con.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -68,28 +76,47 @@ public class VilleDAOImpl implements VilleDAO {
 		return null;
 	}
 
-	@Override
 	public void ajouterVille(Ville ville) {
 		Connection con = new JDBCConfiguration().getCo();
+		Statement st = null;
 
 		try {
-			Statement st = con.createStatement();
-			System.out.println(
-					"INSERT INTO `ville_france`(`Code_commune_INSEE`, `Nom_commune`, `Code_postal`, `Libelle_acheminement`, `Ligne_5`, `Latitude`, `Longitude`) VALUES ('"
-							+ ville.getInsee() + "','" + ville.getNom() + "','" + ville.getCodePostal() + "','"
-							+ ville.getLibelle() + "','" + ville.getLigne() + "','" + ville.getCoord().getLatitude()
-							+ "','" + ville.getCoord().getLongitude() + "';");
+			st = con.createStatement();
 			st.executeUpdate(
 					"INSERT INTO `ville_france`(`Code_commune_INSEE`, `Nom_commune`, `Code_postal`, `Libelle_acheminement`, `Ligne_5`, `Latitude`, `Longitude`) VALUES ('"
 							+ ville.getInsee() + "','" + ville.getNom() + "','" + ville.getCodePostal() + "','"
 							+ ville.getLibelle() + "','" + ville.getLigne() + "','" + ville.getCoord().getLatitude()
 							+ "','" + ville.getCoord().getLongitude() + "');");
-			System.out.println("Ajout Réussi");
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println("Impossible d'ajouter la ville à la base de donnée");
 		} finally {
 			try {
+				st.close();
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void modifierVille(Ville ville, String insee) {
+		Connection con = new JDBCConfiguration().getCo();
+		Statement st = null;
+
+		try {
+			st = con.createStatement();
+			st.executeUpdate("UPDATE ville_france SET Code_commune_INSEE='" + ville.getInsee() + "', Nom_commune ='"
+					+ ville.getNom() + "',Code_postal='" + ville.getCodePostal() + "',Libelle_acheminement='"
+					+ ville.getLibelle() + "',Ligne_5='" + ville.getLigne() + "',Latitude='"
+					+ ville.getCoord().getLatitude() + "',Longitude='" + ville.getCoord().getLongitude()
+					+ "' WHERE Code_commune_INSEE='" + insee + "';");
+			System.out.println("Modification réussie");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Impossible de modifier la ville dans la base de donnée");
+		} finally {
+			try {
+				st.close();
 				con.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
