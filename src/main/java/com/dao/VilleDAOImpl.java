@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.config.JDBCConfiguration;
@@ -14,6 +16,8 @@ import com.dto.Ville;
 
 @Service
 public class VilleDAOImpl implements VilleDAO {
+	
+	private Logger logger = LoggerFactory.getLogger(VilleDAOImpl.class);
 
 	public ArrayList<Ville> findAllVilles() {
 		ArrayList<Ville> liste = new ArrayList<Ville>();
@@ -21,6 +25,7 @@ public class VilleDAOImpl implements VilleDAO {
 		Connection con = new JDBCConfiguration().getCo();
 		Statement st = null;
 		ResultSet resultat = null;
+
 		try {
 			st = con.createStatement();
 			resultat = st.executeQuery("SELECT * FROM ville_france;");
@@ -32,14 +37,14 @@ public class VilleDAOImpl implements VilleDAO {
 			}
 			return liste;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			this.logger.error("Impossible de réaliser la requête.", e);
 		} finally {
 			try {
 				resultat.close();
 				st.close();
 				con.close();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				this.logger.error("Impossible de se déconnecter.", e);
 			}
 		}
 		return null;
@@ -63,14 +68,14 @@ public class VilleDAOImpl implements VilleDAO {
 			}
 			return liste;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			this.logger.error("Impossible de réaliser la requête.", e);
 		} finally {
 			try {
 				resultat.close();
 				st.close();
 				con.close();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				this.logger.error("Impossible de se déconnecter.", e);
 			}
 		}
 		return null;
@@ -88,13 +93,13 @@ public class VilleDAOImpl implements VilleDAO {
 							+ ville.getLibelle() + "','" + ville.getLigne() + "','" + ville.getCoord().getLatitude()
 							+ "','" + ville.getCoord().getLongitude() + "');");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			this.logger.error("Impossible de réaliser la requête.", e);
 		} finally {
 			try {
 				st.close();
 				con.close();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				this.logger.error("Impossible de se déconnecter.", e);
 			}
 		}
 	}
@@ -110,17 +115,14 @@ public class VilleDAOImpl implements VilleDAO {
 					+ ville.getLibelle() + "',Ligne_5='" + ville.getLigne() + "',Latitude='"
 					+ ville.getCoord().getLatitude() + "',Longitude='" + ville.getCoord().getLongitude()
 					+ "' WHERE Code_commune_INSEE='" + insee + "';");
-			System.out.println("Modification réussie");
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Impossible de modifier la ville dans la base de donnée");
+			this.logger.error("Impossible de réaliser la requête.", e);
 		} finally {
 			try {
 				st.close();
 				con.close();
 			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Fermeture impossible");
+				this.logger.error("Impossible de se déconnecter.", e);
 			}
 		}
 	}
