@@ -22,7 +22,7 @@ public class JDBCConfiguration {
 			this.logger.error("La classe Driver n'existe pas.", e);
 		}
 		try {
-			this.co = DriverManager.getConnection("jdbc:mysql://localhost/Projet_Maven?user=root&password=Y2s7P73d");
+			this.co = DriverManager.getConnection("jdbc:mysql://localhost/Projet_Maven?user=root&password=root");
 		} catch (SQLException e) {
 			this.logger.error("Impossible de se connecter à la base de données.", e);
 		}
