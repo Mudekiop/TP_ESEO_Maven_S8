@@ -33,4 +33,8 @@ public class VilleBLOImpl implements VilleBLO {
 		villeDAO.modifierVille(ville, insee);
 	}
 
+	public void supprimerVille(String insee) {
+		villeDAO.supprimerVille(insee);
+	}
+
 }

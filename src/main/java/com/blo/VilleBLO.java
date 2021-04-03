@@ -11,4 +11,6 @@ public interface VilleBLO {
 	void ajouterVille(Ville ville);
 	
 	void modifierVille(Ville ville, String insee);
+	
+	void supprimerVille(String insee);
 }

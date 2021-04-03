@@ -16,33 +16,31 @@ import com.dto.Ville;
 
 @Service
 public class VilleDAOImpl implements VilleDAO {
-	
+
 	private Logger logger = LoggerFactory.getLogger(VilleDAOImpl.class);
+	private Connection con = new JDBCConfiguration().getCo();
+	private Statement st = null;
+	private ResultSet resultat = null;
+	private ArrayList<Ville> liste = new ArrayList<Ville>();
+	private Coordonnees coord = null;
 
 	public ArrayList<Ville> findAllVilles() {
-		ArrayList<Ville> liste = new ArrayList<Ville>();
-		Coordonnees coord = null;
-		Connection con = new JDBCConfiguration().getCo();
-		Statement st = null;
-		ResultSet resultat = null;
-
 		try {
-			st = con.createStatement();
-			resultat = st.executeQuery("SELECT * FROM ville_france;");
+			this.st = this.con.createStatement();
+			this.resultat = this.st.executeQuery("SELECT * FROM ville_france;");
 			while (resultat.next()) {
-				coord = new Coordonnees(resultat.getString("Latitude"), resultat.getString("Longitude"));
+				this.coord = new Coordonnees(resultat.getString("Latitude"), resultat.getString("Longitude"));
 				Ville ville = new Ville(resultat.getString(1), resultat.getString(2), resultat.getString(3),
 						resultat.getString(4), resultat.getString(5), coord);
-				liste.add(ville);
+				this.liste.add(ville);
 			}
-			return liste;
+			return this.liste;
 		} catch (SQLException e) {
 			this.logger.error("Impossible de réaliser la requête.", e);
 		} finally {
 			try {
-				resultat.close();
-				st.close();
-				con.close();
+				this.st.close();
+				this.con.close();
 			} catch (SQLException e) {
 				this.logger.error("Impossible de se déconnecter.", e);
 			}
@@ -51,29 +49,22 @@ public class VilleDAOImpl implements VilleDAO {
 	}
 
 	public ArrayList<Ville> getVilleByCodePostal(String code) {
-		ArrayList<Ville> liste = new ArrayList<Ville>();
-		Coordonnees coord = null;
-		Connection con = new JDBCConfiguration().getCo();
-		Statement st = null;
-		ResultSet resultat = null;
-
 		try {
-			st = con.createStatement();
-			resultat = st.executeQuery("SELECT * FROM ville_france WHERE Code_postal='" + code + "';");
+			this.st = this.con.createStatement();
+			this.resultat = this.st.executeQuery("SELECT * FROM ville_france WHERE Code_postal='" + code + "';");
 			while (resultat.next()) {
-				coord = new Coordonnees(resultat.getString("Latitude"), resultat.getString("Longitude"));
+				this.coord = new Coordonnees(resultat.getString("Latitude"), resultat.getString("Longitude"));
 				Ville ville = new Ville(resultat.getString(1), resultat.getString(2), resultat.getString(3),
 						resultat.getString(4), resultat.getString(5), coord);
-				liste.add(ville);
+				this.liste.add(ville);
 			}
-			return liste;
+			return this.liste;
 		} catch (SQLException e) {
 			this.logger.error("Impossible de réaliser la requête.", e);
 		} finally {
 			try {
-				resultat.close();
-				st.close();
-				con.close();
+				this.st.close();
+				this.con.close();
 			} catch (SQLException e) {
 				this.logger.error("Impossible de se déconnecter.", e);
 			}
@@ -82,12 +73,9 @@ public class VilleDAOImpl implements VilleDAO {
 	}
 
 	public void ajouterVille(Ville ville) {
-		Connection con = new JDBCConfiguration().getCo();
-		Statement st = null;
-
 		try {
-			st = con.createStatement();
-			st.executeUpdate(
+			this.st = this.con.createStatement();
+			this.st.executeUpdate(
 					"INSERT INTO `ville_france`(`Code_commune_INSEE`, `Nom_commune`, `Code_postal`, `Libelle_acheminement`, `Ligne_5`, `Latitude`, `Longitude`) VALUES ('"
 							+ ville.getInsee() + "','" + ville.getNom() + "','" + ville.getCodePostal() + "','"
 							+ ville.getLibelle() + "','" + ville.getLigne() + "','" + ville.getCoord().getLatitude()
@@ -96,8 +84,8 @@ public class VilleDAOImpl implements VilleDAO {
 			this.logger.error("Impossible de réaliser la requête.", e);
 		} finally {
 			try {
-				st.close();
-				con.close();
+				this.st.close();
+				this.con.close();
 			} catch (SQLException e) {
 				this.logger.error("Impossible de se déconnecter.", e);
 			}
@@ -105,22 +93,35 @@ public class VilleDAOImpl implements VilleDAO {
 	}
 
 	public void modifierVille(Ville ville, String insee) {
-		Connection con = new JDBCConfiguration().getCo();
-		Statement st = null;
-
 		try {
-			st = con.createStatement();
-			st.executeUpdate("UPDATE ville_france SET Code_commune_INSEE='" + ville.getInsee() + "', Nom_commune ='"
-					+ ville.getNom() + "',Code_postal='" + ville.getCodePostal() + "',Libelle_acheminement='"
-					+ ville.getLibelle() + "',Ligne_5='" + ville.getLigne() + "',Latitude='"
-					+ ville.getCoord().getLatitude() + "',Longitude='" + ville.getCoord().getLongitude()
-					+ "' WHERE Code_commune_INSEE='" + insee + "';");
+			this.st = con.createStatement();
+			this.st.executeUpdate("UPDATE ville_france SET Code_commune_INSEE='" + ville.getInsee()
+					+ "', Nom_commune ='" + ville.getNom() + "',Code_postal='" + ville.getCodePostal()
+					+ "',Libelle_acheminement='" + ville.getLibelle() + "',Ligne_5='" + ville.getLigne()
+					+ "',Latitude='" + ville.getCoord().getLatitude() + "',Longitude='"
+					+ ville.getCoord().getLongitude() + "' WHERE Code_commune_INSEE='" + insee + "';");
 		} catch (SQLException e) {
 			this.logger.error("Impossible de réaliser la requête.", e);
 		} finally {
 			try {
-				st.close();
-				con.close();
+				this.st.close();
+				this.con.close();
+			} catch (SQLException e) {
+				this.logger.error("Impossible de se déconnecter.", e);
+			}
+		}
+	}
+
+	public void supprimerVille(String insee) {
+		try {
+			this.st = this.con.createStatement();
+			this.st.executeUpdate("DELETE FROM ville_france WHERE Code_commune_INSEE='" + insee + "';");
+		} catch (SQLException e) {
+			this.logger.error("Impossible de réaliser la requête.", e);
+		} finally {
+			try {
+				this.st.close();
+				this.con.close();
 			} catch (SQLException e) {
 				this.logger.error("Impossible de se déconnecter.", e);
 			}

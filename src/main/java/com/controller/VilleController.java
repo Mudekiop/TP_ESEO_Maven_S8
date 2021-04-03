@@ -27,17 +27,24 @@ public class VilleController {
 		return villeBLOService.getInfoVille(codePostal);
 	}
 
-	// Méthode Post
+	// Méthode POST
 	@RequestMapping(value = "/ville", method = RequestMethod.POST)
 	public void appelPost(@RequestBody Ville newVille) {
 		System.out.println("Appel POST");
 		villeBLOService.ajouterVille(newVille);
 	}
 
-	// Méthode Put
+	// Méthode PUT
 	@RequestMapping(value = "/ville", method = RequestMethod.PUT)
 	public void appelPut(@RequestBody Ville newVille, @RequestParam(required = true, value = "insee") String insee) {
 		System.out.println("Appel PUT");
 		villeBLOService.modifierVille(newVille, insee);
+	}
+
+	// Méthode DELETE
+	@RequestMapping(value = "/ville", method = RequestMethod.DELETE)
+	public void appelDelete(@RequestParam(required = true, value = "insee") String insee) {
+		System.out.println("Appel DELETE");
+		villeBLOService.supprimerVille(insee);
 	}
 }
