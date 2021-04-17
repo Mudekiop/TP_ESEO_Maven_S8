@@ -7,13 +7,10 @@ import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.dao.VilleDAOImpl;
-
 public class JDBCConfiguration {
 
 	private Connection co;
 	private Logger logger = LoggerFactory.getLogger(JDBCConfiguration.class);
-
 
 	public JDBCConfiguration() {
 		try {
@@ -22,7 +19,10 @@ public class JDBCConfiguration {
 			this.logger.error("La classe Driver n'existe pas.", e);
 		}
 		try {
-			this.co = DriverManager.getConnection("jdbc:mysql://localhost/Projet_Maven?user=root&password=root");
+			String user = Configuration.getString("user");
+			String mdp = Configuration.getString("password");
+			this.co = DriverManager
+					.getConnection("jdbc:mysql://localhost/Projet_Maven?user=" + user + "&password=" + mdp);
 		} catch (SQLException e) {
 			this.logger.error("Impossible de se connecter à la base de données.", e);
 		}

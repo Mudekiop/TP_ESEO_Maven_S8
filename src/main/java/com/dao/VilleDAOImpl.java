@@ -18,15 +18,16 @@ import com.dto.Ville;
 public class VilleDAOImpl implements VilleDAO {
 
 	private Logger logger = LoggerFactory.getLogger(VilleDAOImpl.class);
-	private Connection con = new JDBCConfiguration().getCo();
 	private Statement st = null;
 	private ResultSet resultat = null;
 	private ArrayList<Ville> liste = new ArrayList<Ville>();
 	private Coordonnees coord = null;
 
 	public ArrayList<Ville> findAllVilles() {
+		Connection con = new JDBCConfiguration().getCo();
+
 		try {
-			this.st = this.con.createStatement();
+			this.st = con.createStatement();
 			this.resultat = this.st.executeQuery("SELECT * FROM ville_france;");
 			while (resultat.next()) {
 				this.coord = new Coordonnees(resultat.getString("Latitude"), resultat.getString("Longitude"));
@@ -40,7 +41,7 @@ public class VilleDAOImpl implements VilleDAO {
 		} finally {
 			try {
 				this.st.close();
-				this.con.close();
+				con.close();
 			} catch (SQLException e) {
 				this.logger.error("Impossible de se déconnecter.", e);
 			}
@@ -49,8 +50,10 @@ public class VilleDAOImpl implements VilleDAO {
 	}
 
 	public ArrayList<Ville> getVilleByCodePostal(String code) {
+		Connection con = new JDBCConfiguration().getCo();
+
 		try {
-			this.st = this.con.createStatement();
+			this.st = con.createStatement();
 			this.resultat = this.st.executeQuery("SELECT * FROM ville_france WHERE Code_postal='" + code + "';");
 			while (resultat.next()) {
 				this.coord = new Coordonnees(resultat.getString("Latitude"), resultat.getString("Longitude"));
@@ -64,7 +67,7 @@ public class VilleDAOImpl implements VilleDAO {
 		} finally {
 			try {
 				this.st.close();
-				this.con.close();
+				con.close();
 			} catch (SQLException e) {
 				this.logger.error("Impossible de se déconnecter.", e);
 			}
@@ -73,8 +76,10 @@ public class VilleDAOImpl implements VilleDAO {
 	}
 
 	public void ajouterVille(Ville ville) {
+		Connection con = new JDBCConfiguration().getCo();
+
 		try {
-			this.st = this.con.createStatement();
+			this.st = con.createStatement();
 			this.st.executeUpdate(
 					"INSERT INTO `ville_france`(`Code_commune_INSEE`, `Nom_commune`, `Code_postal`, `Libelle_acheminement`, `Ligne_5`, `Latitude`, `Longitude`) VALUES ('"
 							+ ville.getInsee() + "','" + ville.getNom() + "','" + ville.getCodePostal() + "','"
@@ -85,7 +90,7 @@ public class VilleDAOImpl implements VilleDAO {
 		} finally {
 			try {
 				this.st.close();
-				this.con.close();
+				con.close();
 			} catch (SQLException e) {
 				this.logger.error("Impossible de se déconnecter.", e);
 			}
@@ -93,6 +98,8 @@ public class VilleDAOImpl implements VilleDAO {
 	}
 
 	public void modifierVille(Ville ville, String insee) {
+		Connection con = new JDBCConfiguration().getCo();
+
 		try {
 			this.st = con.createStatement();
 			this.st.executeUpdate("UPDATE ville_france SET Code_commune_INSEE='" + ville.getInsee()
@@ -105,7 +112,7 @@ public class VilleDAOImpl implements VilleDAO {
 		} finally {
 			try {
 				this.st.close();
-				this.con.close();
+				con.close();
 			} catch (SQLException e) {
 				this.logger.error("Impossible de se déconnecter.", e);
 			}
@@ -113,15 +120,17 @@ public class VilleDAOImpl implements VilleDAO {
 	}
 
 	public void supprimerVille(String insee) {
+		Connection con = new JDBCConfiguration().getCo();
+
 		try {
-			this.st = this.con.createStatement();
+			this.st = con.createStatement();
 			this.st.executeUpdate("DELETE FROM ville_france WHERE Code_commune_INSEE='" + insee + "';");
 		} catch (SQLException e) {
 			this.logger.error("Impossible de réaliser la requête.", e);
 		} finally {
 			try {
 				this.st.close();
-				this.con.close();
+				con.close();
 			} catch (SQLException e) {
 				this.logger.error("Impossible de se déconnecter.", e);
 			}
