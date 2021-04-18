@@ -20,7 +20,7 @@ public class VilleBLOImpl implements VilleBLO {
 		if (monParam == null) {
 			listeVille = villeDAO.findAllVilles();
 		} else {
-			listeVille = villeDAO.getVilleByCodePostal(monParam);
+			listeVille = villeDAO.getVilleByInsee(monParam);
 		}
 		return listeVille;
 	}

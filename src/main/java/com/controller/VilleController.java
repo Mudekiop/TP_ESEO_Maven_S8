@@ -22,9 +22,9 @@ public class VilleController {
 	// Méthode GET
 	@RequestMapping(value = "/ville", method = RequestMethod.GET)
 	@ResponseBody
-	public ArrayList<Ville> appelGet(@RequestParam(required = false, value = "codePostal") String codePostal) {
+	public ArrayList<Ville> appelGet(@RequestParam(required = false, value = "codeInsee") String insee) {
 		System.out.println("Appel GET");
-		return villeBLOService.getInfoVille(codePostal);
+		return villeBLOService.getInfoVille(insee);
 	}
 
 	// Méthode POST

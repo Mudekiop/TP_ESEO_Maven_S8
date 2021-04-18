@@ -8,7 +8,7 @@ public interface VilleDAO {
 
 	ArrayList<Ville> findAllVilles();
 
-	ArrayList<Ville> getVilleByCodePostal(String code);
+	ArrayList<Ville> getVilleByInsee(String code);
 
 	void ajouterVille(Ville ville);
 

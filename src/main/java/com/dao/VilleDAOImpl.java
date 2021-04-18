@@ -25,7 +25,7 @@ public class VilleDAOImpl implements VilleDAO {
 
 	public ArrayList<Ville> findAllVilles() {
 		Connection con = new JDBCConfiguration().getCo();
-
+		liste = new ArrayList<Ville>();
 		try {
 			this.st = con.createStatement();
 			this.resultat = this.st.executeQuery("SELECT * FROM ville_france;");
@@ -49,12 +49,13 @@ public class VilleDAOImpl implements VilleDAO {
 		return null;
 	}
 
-	public ArrayList<Ville> getVilleByCodePostal(String code) {
+	public ArrayList<Ville> getVilleByInsee(String code) {
 		Connection con = new JDBCConfiguration().getCo();
+		liste = new ArrayList<Ville>();
 
 		try {
 			this.st = con.createStatement();
-			this.resultat = this.st.executeQuery("SELECT * FROM ville_france WHERE Code_postal='" + code + "';");
+			this.resultat = this.st.executeQuery("SELECT * FROM ville_france WHERE Code_commune_INSEE='" + code + "';");
 			while (resultat.next()) {
 				this.coord = new Coordonnees(resultat.getString("Latitude"), resultat.getString("Longitude"));
 				Ville ville = new Ville(resultat.getString(1), resultat.getString(2), resultat.getString(3),
